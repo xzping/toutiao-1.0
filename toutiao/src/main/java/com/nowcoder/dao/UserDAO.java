@@ -4,7 +4,10 @@ import com.nowcoder.model.User;
 import org.apache.ibatis.annotations.*;
 
 /**
- * Created by nowcoder on 2016/7/2.
+ * UserDAO层
+ * 
+ * @author xiezhiping
+ *
  */
 @Mapper
 public interface UserDAO {

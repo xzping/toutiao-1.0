@@ -19,47 +19,50 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by nowcoder on 2016/7/2.
+ * 新闻service层，调用NewsDAO层
+ * 
+ * @author xiezhiping
+ *
  */
 @Service
 public class NewsService {
-    @Autowired
-    private NewsDAO newsDAO;
+	@Autowired
+	private NewsDAO newsDAO;
 
-    public List<News> getLatestNews(int userId, int offset, int limit) {
-        return newsDAO.selectByUserIdAndOffset(userId, offset, limit);
-    }
+	public List<News> getLatestNews(int userId, int offset, int limit) {
+		return newsDAO.selectByUserIdAndOffset(userId, offset, limit);
+	}
 
-    public int addNews(News news) {
-        newsDAO.addNews(news);
-        return news.getId();
-    }
+	public int addNews(News news) {
+		newsDAO.addNews(news);
+		return news.getId();
+	}
 
-    public News getById(int newsId) {
-        return newsDAO.getById(newsId);
-    }
+	public News getById(int newsId) {
+		return newsDAO.getById(newsId);
+	}
 
-    public String saveImage(MultipartFile file) throws IOException {
-        int dotPos = file.getOriginalFilename().lastIndexOf(".");
-        if (dotPos < 0) {
-            return null;
-        }
-        String fileExt = file.getOriginalFilename().substring(dotPos + 1).toLowerCase();
-        if (!ToutiaoUtil.isFileAllowed(fileExt)) {
-            return null;
-        }
+	public String saveImage(MultipartFile file) throws IOException {
+		int dotPos = file.getOriginalFilename().lastIndexOf(".");
+		if (dotPos < 0) {
+			return null;
+		}
+		String fileExt = file.getOriginalFilename().substring(dotPos + 1).toLowerCase();
+		if (!ToutiaoUtil.isFileAllowed(fileExt)) {
+			return null;
+		}
 
-        String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;
-        Files.copy(file.getInputStream(), new File(ToutiaoUtil.IMAGE_DIR + fileName).toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
-        return ToutiaoUtil.TOUTIAO_DOMAIN + "image?name=" + fileName;
-    }
+		String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;
+		Files.copy(file.getInputStream(), new File(ToutiaoUtil.IMAGE_DIR + fileName).toPath(),
+				StandardCopyOption.REPLACE_EXISTING);
+		return ToutiaoUtil.TOUTIAO_DOMAIN + "image?name=" + fileName;
+	}
 
-    public int updateCommentCount(int id, int count) {
-        return newsDAO.updateCommentCount(id, count);
-    }
+	public int updateCommentCount(int id, int count) {
+		return newsDAO.updateCommentCount(id, count);
+	}
 
-    public int updateLikeCount(int id, int count) {
-        return newsDAO.updateLikeCount(id, count);
-    }
+	public int updateLikeCount(int id, int count) {
+		return newsDAO.updateLikeCount(id, count);
+	}
 }

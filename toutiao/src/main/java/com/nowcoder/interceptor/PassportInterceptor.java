@@ -16,53 +16,67 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
- * Created by nowcoder on 2016/7/3.
+ * passportInterceptor拦截器的功能判断是否为登陆用户
+ * 即是在执行controller之前，首先获取当前用户是否为登陆过的用户（在过期日期之前），如果为登陆过的用户，则自动获取该用户的ticket信息
+ * 
+ * @author xiezhiping
+ *
  */
 @Component
 public class PassportInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private LoginTicketDAO loginTicketDAO;
+	// 用户的页面访问时，传过来的是ticket信息，ticket是存储在cookie中的
+	@Autowired
+	private LoginTicketDAO loginTicketDAO;
 
-    @Autowired
-    private UserDAO userDAO;
+	// 访问用户
+	@Autowired
+	private UserDAO userDAO;
 
-    @Autowired
-    private HostHolder hostHolder;
+	@Autowired
+	private HostHolder hostHolder;
 
-    @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        String ticket = null;
-        if (httpServletRequest.getCookies() != null) {
-            for (Cookie cookie : httpServletRequest.getCookies()) {
-                if (cookie.getName().equals("ticket")) {
-                    ticket = cookie.getValue();
-                    break;
-                }
-            }
-        }
+	@Override
+	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o)
+			throws Exception {
+		String ticket = null;
+		// 遍历http请求中的cookie中有没有该ticket信息
+		if (httpServletRequest.getCookies() != null) {
+			for (Cookie cookie : httpServletRequest.getCookies()) {
+				if (cookie.getName().equals("ticket")) {
+					ticket = cookie.getValue();
+					break;
+				}
+			}
+		}
 
-        if (ticket != null) {
-            LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
-            if (loginTicket == null || loginTicket.getExpired().before(new Date()) || loginTicket.getStatus() != 0) {
-                return true;
-            }
+		// 如果ticket不为null，则说明为登陆用户（过期时间之内）
+		if (ticket != null) {
+			LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
+			if (loginTicket == null || loginTicket.getExpired().before(new Date()) || loginTicket.getStatus() != 0) {
+				return true;
+			}
 
-            User user = userDAO.selectById(loginTicket.getUserId());
-            hostHolder.setUser(user);
-        }
-        return true;
-    }
+			// 通过ticket知道了访问的用户
+			User user = userDAO.selectById(loginTicket.getUserId());
+			// 把当前用户设置为访问用户
+			hostHolder.setUser(user);
+		}
+		return true;
+	}
 
-    @Override
-    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        if (modelAndView != null && hostHolder.getUser() != null) {
-            modelAndView.addObject("user", hostHolder.getUser());
-        }
-    }
+	@Override
+	public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o,
+			ModelAndView modelAndView) throws Exception {
+		// 结束之后，即controller层运行结束，如果modelAndView不是空的，则进行渲染
+		if (modelAndView != null && hostHolder.getUser() != null) {
+			modelAndView.addObject("user", hostHolder.getUser());
+		}
+	}
 
-    @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        hostHolder.clear();
-    }
+	@Override
+	public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+			Object o, Exception e) throws Exception {
+		hostHolder.clear();// 把当前用户清掉
+	}
 }

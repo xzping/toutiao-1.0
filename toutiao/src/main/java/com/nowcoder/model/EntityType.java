@@ -1,7 +1,9 @@
 package com.nowcoder.model;
 
 /**
- * Created by nowcoder on 2016/7/9.
+ * 
+ * @author xiezhiping
+ *
  */
 public class EntityType {
     public static int ENTITY_NEWS = 1;

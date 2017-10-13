@@ -65,7 +65,7 @@
                 oEl.parent().find('.click-dislike').removeClass('pressed');
             },
             error: function () {
-                alert('出现错误，请重试');
+                alert('请登陆后，再进行操作!');
             },
             always: function () {
                 that.actioning = false;

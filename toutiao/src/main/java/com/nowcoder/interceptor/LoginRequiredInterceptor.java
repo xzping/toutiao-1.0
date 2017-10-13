@@ -16,28 +16,34 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
- * Created by nowcoder on 2016/7/3.
+ * 登陆的拦截器，判断当前访问
+ * @author xiezhiping
+ *
  */
 @Component
 public class LoginRequiredInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private HostHolder hostHolder;
+	@Autowired
+	private HostHolder hostHolder;
 
-    @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if (hostHolder.getUser() == null) {
-            httpServletResponse.sendRedirect("/?pop=1");
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o)
+			throws Exception {
+		//如果当前用户为null，即不是登陆用户
+		if (hostHolder.getUser() == null) {
+			httpServletResponse.sendRedirect("/?pop=1");//pop=1则让登陆框弹出来
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-    }
+	@Override
+	public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o,
+			ModelAndView modelAndView) throws Exception {
+	}
 
-    @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-    }
+	@Override
+	public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+			Object o, Exception e) throws Exception {
+	}
 }

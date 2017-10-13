@@ -8,21 +8,26 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * Created by nowcoder on 2016/7/3.
+ * 注册拦截器,初始化拦截器配置
+ * 
+ * @author xiezhiping
+ *
  */
 @Component
 public class ToutiaoWebConfiguration extends WebMvcConfigurerAdapter {
-    @Autowired
-    PassportInterceptor passportInterceptor;
+	@Autowired
+	PassportInterceptor passportInterceptor;
 
-    @Autowired
-    LoginRequiredInterceptor loginRequiredInterceptor;
+	@Autowired
+	LoginRequiredInterceptor loginRequiredInterceptor;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(passportInterceptor);
-        registry.addInterceptor(loginRequiredInterceptor).
-                addPathPatterns("/msg/*").addPathPatterns("/like").addPathPatterns("/dislike");
-        super.addInterceptors(registry);
-    }
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		// 首先，注册passportInterceptor拦截器，即每次进行controller层时，就会回调passportInterceptor拦截器
+		registry.addInterceptor(passportInterceptor);
+		// 接着，注册loginRequiredInterceptor拦截器
+		registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/msg/*").addPathPatterns("/like")
+				.addPathPatterns("/dislike");
+		super.addInterceptors(registry);
+	}
 }

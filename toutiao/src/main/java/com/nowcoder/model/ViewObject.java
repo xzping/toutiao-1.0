@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Created by rainday on 16/6/30.
+ * 一个封装的map集合，用来存放/获取相应的map对象信息
+ * @author xiezhiping
+ *
  */
 public class ViewObject {
     private Map<String, Object> objs = new HashMap<String, Object>();
