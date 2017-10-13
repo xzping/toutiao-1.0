@@ -3,6 +3,7 @@ package com.nowcoder.controller;
 import com.nowcoder.model.*;
 import com.nowcoder.service.*;
 import com.nowcoder.util.ToutiaoUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 发布新闻资讯接口
  * 
  * @author xiezhiping
  *
@@ -46,6 +48,13 @@ public class NewsController {
 	@Autowired
 	LikeService likeService;
 
+	/**
+	 * 读取指定newsId的的新闻资讯
+	 * 
+	 * @param newsId
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(path = { "/news/{newsId}" }, method = { RequestMethod.GET })
 	public String newsDetail(@PathVariable("newsId") int newsId, Model model) {
 		News news = newsService.getById(newsId);
@@ -73,6 +82,13 @@ public class NewsController {
 		return "detail";
 	}
 
+	/**
+	 * 增加新闻资讯的评论
+	 * 
+	 * @param newsId
+	 * @param content
+	 * @return
+	 */
 	@RequestMapping(path = { "/addComment" }, method = { RequestMethod.POST })
 	public String addComment(@RequestParam("newsId") int newsId, @RequestParam("content") String content) {
 		try {
@@ -97,24 +113,41 @@ public class NewsController {
 		return "redirect:/news/" + String.valueOf(newsId);
 	}
 
+	/**
+	 * 获取图片信息,展示 通过HttpServletResponse返回图片信息
+	 * 
+	 * @param imageName
+	 * @param response
+	 */
 	@RequestMapping(path = { "/image" }, method = { RequestMethod.GET })
 	@ResponseBody
 	public void getImage(@RequestParam("name") String imageName, HttpServletResponse response) {
 		try {
+			// 文件类型
 			response.setContentType("image/jpeg");
+			// 将原有的图片在本地存储目录下copy到response.getOutputStream()中
 			StreamUtils.copy(new FileInputStream(new File(ToutiaoUtil.IMAGE_DIR + imageName)),
 					response.getOutputStream());
 		} catch (Exception e) {
-			logger.error("读取图片错误" + imageName + e.getMessage());
+			logger.error("读取图片错误" + imageName + "错误信息为" + e.getMessage());
 		}
 	}
 
+	/**
+	 * 上传图片按钮
+	 * 
+	 * @param file
+	 * @return
+	 */
 	@RequestMapping(path = { "/uploadImage/" }, method = { RequestMethod.POST })
 	@ResponseBody
 	public String uploadImage(@RequestParam("file") MultipartFile file) {
 		try {
-			String fileUrl = newsService.saveImage(file);
-			// String fileUrl = qiniuService.saveImage(file);
+			// 使用本地存储图片
+			// String fileUrl = newsService.saveImage(file);
+
+			// 使用七牛云存储CDN
+			String fileUrl = qiniuService.saveImage(file);
 			if (fileUrl == null) {
 				return ToutiaoUtil.getJSONString(1, "上传图片失败");
 			}
@@ -125,22 +158,33 @@ public class NewsController {
 		}
 	}
 
+	/**
+	 * 分享资讯按钮 前端传入三个参数，图片、标题和链接
+	 * 
+	 * @param image
+	 * @param title
+	 * @param link
+	 * @return
+	 */
 	@RequestMapping(path = { "/user/addNews/" }, method = { RequestMethod.POST })
 	@ResponseBody
 	public String addNews(@RequestParam("image") String image, @RequestParam("title") String title,
 			@RequestParam("link") String link) {
 		try {
+			// 构造一个news对象，用来存放前端传入的新闻资讯信息等字段
 			News news = new News();
-			news.setCreatedDate(new Date());
-			news.setTitle(title);
-			news.setImage(image);
-			news.setLink(link);
+			news.setCreatedDate(new Date());// 创建时间
+			news.setTitle(title);// 标题
+			news.setImage(image);// 图片
+			news.setLink(link);// 链接
+			// 如果当前用户已经登陆，则将当前用户的userId传入到news表字段中，主外键关联
 			if (hostHolder.getUser() != null) {
 				news.setUserId(hostHolder.getUser().getId());
 			} else {
 				// 设置一个匿名用户
 				news.setUserId(3);
 			}
+			// 将当前分享的新闻资讯添加到数据库中
 			newsService.addNews(news);
 			return ToutiaoUtil.getJSONString(0);
 		} catch (Exception e) {

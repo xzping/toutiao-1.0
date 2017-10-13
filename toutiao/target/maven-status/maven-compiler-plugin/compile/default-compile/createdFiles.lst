@@ -2,13 +2,11 @@ com/nowcoder/dao/UserDAO.class
 com/nowcoder/service/NewsService.class
 com/nowcoder/ToutiaoApplication.class
 com/nowcoder/controller/IndexController.class
-com/nowcoder/util/ToutiaoUtil.class
 com/nowcoder/controller/HomeController.class
 com/nowcoder/model/HostHolder.class
 com/nowcoder/controller/SettingController.class
 com/nowcoder/model/ViewObject.class
 com/nowcoder/configuration/ToutiaoWebConfiguration.class
-com/nowcoder/aspect/LogAspect.class
 com/nowcoder/model/LoginTicket.class
 com/nowcoder/service/UserService.class
 com/nowcoder/interceptor/LoginRequiredInterceptor.class
