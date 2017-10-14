@@ -22,7 +22,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by nowcoder on 2016/7/9.
+ * 消息接口
+ * 
+ * @author xiezhiping
+ *
  */
 @Controller
 public class MessageController {
@@ -42,11 +45,13 @@ public class MessageController {
         try {
             int localUserId = hostHolder.getUser().getId();
             List<ViewObject> conversations = new ArrayList<ViewObject>();
-            List<Message> conversationList = messageService.getConversationList(localUserId, 0, 10);
+            List<Message> conversationList = messageService.getConversationList(localUserId, 0, 20);
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
                 vo.set("conversation", msg);
+                //交互的对象
                 int targetId = msg.getFromId() == localUserId ? msg.getToId() : msg.getFromId();
+                //把用户的相关信息找出来
                 User user = userService.getUser(targetId);
                 vo.set("user", user);
                 vo.set("unread", messageService.getConvesationUnreadCount(localUserId, msg.getConversationId()));
@@ -62,7 +67,7 @@ public class MessageController {
     @RequestMapping(path = {"/msg/detail"}, method = {RequestMethod.GET})
     public String conversationDetail(Model model, @Param("conversationId") String conversationId) {
         try {
-            List<Message> conversationList = messageService.getConversationDetail(conversationId, 0, 10);
+            List<Message> conversationList = messageService.getConversationDetail(conversationId, 0, 20);
             List<ViewObject> messages = new ArrayList<>();
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
@@ -94,7 +99,7 @@ public class MessageController {
             msg.setFromId(fromId);
             msg.setToId(toId);
             msg.setCreatedDate(new Date());
-            //msg.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
+            msg.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
             messageService.addMessage(msg);
             return ToutiaoUtil.getJSONString(msg.getId());
         } catch (Exception e) {

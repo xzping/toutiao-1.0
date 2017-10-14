@@ -3,7 +3,9 @@ package com.nowcoder.model;
 import java.util.Date;
 
 /**
- * Created by nowcoder on 2016/7/9.
+ * 
+ * @author xiezhiping
+ *
  */
 public class Comment {
     private int id;

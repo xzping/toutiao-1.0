@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Created by nowcoder on 2016/7/9.
+ * 
+ * @author xiezhiping
+ *
  */
 @Service
 public class MessageService {
@@ -28,6 +30,6 @@ public class MessageService {
     }
 
     public int getConvesationUnreadCount(int userId, String conversationId) {
-        return messageDAO.getConvesationUnreadCount(userId, conversationId);
+        return messageDAO.getConversationUnreadCount(userId, conversationId);
     }
 }

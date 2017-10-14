@@ -49,7 +49,7 @@ public class NewsController {
 	LikeService likeService;
 
 	/**
-	 * 读取指定newsId的的新闻资讯
+	 * 读取指定newsId的的新闻资讯，即资讯详情页
 	 * 
 	 * @param newsId
 	 * @param model
@@ -57,6 +57,7 @@ public class NewsController {
 	 */
 	@RequestMapping(path = { "/news/{newsId}" }, method = { RequestMethod.GET })
 	public String newsDetail(@PathVariable("newsId") int newsId, Model model) {
+		// 取出当前newsId的这条资讯
 		News news = newsService.getById(newsId);
 		if (news != null) {
 			int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
@@ -67,7 +68,8 @@ public class NewsController {
 				model.addAttribute("like", 0);
 			}
 			// 评论
-			List<Comment> comments = commentService.getCommentsByEntity(news.getId(), EntityType.ENTITY_NEWS);
+			List<Comment> comments = commentService.getCommentsByEntity(news.getId(), EntityType.ENTITY_NEWS);// 对资讯进行评论
+			// 对评论进行遍历
 			List<ViewObject> commentVOs = new ArrayList<ViewObject>();
 			for (Comment comment : comments) {
 				ViewObject vo = new ViewObject();
@@ -77,13 +79,15 @@ public class NewsController {
 			}
 			model.addAttribute("comments", commentVOs);
 		}
+		// 返回前端当前资讯，为了让前端调用$!{news.title}、$!{news.commentCount}等字段显示
 		model.addAttribute("news", news);
+		// 资讯的作者，为了让前端调用$!{owner.id}、$!{owner.name}等字段显示
 		model.addAttribute("owner", userService.getUser(news.getUserId()));
 		return "detail";
 	}
 
 	/**
-	 * 增加新闻资讯的评论
+	 * 增加新闻资讯的评论，传入新闻id的newsId和评论的内容content
 	 * 
 	 * @param newsId
 	 * @param content

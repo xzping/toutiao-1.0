@@ -80,7 +80,7 @@ public class HomeController {
 		// SpringMVC通过一个Model来前后端传递数据，将要传递给前端的数据传入到model对象中即可，是一个key-value的对象，
 		// 前端通过调用model对象的key便可以读取到后端发送的数据信息
 		// 当userId=0时，显示所有的新闻资讯
-		model.addAttribute("vos", getNews(0, 0, 10));
+		model.addAttribute("vos", getNews(0, 0, 20));
 
 		// LoginPop邮箱登陆
 		if (hostHolder.getUser() != null) {
