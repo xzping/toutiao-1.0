@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 消息接口
+ * 消息中心接口
  * 
  * @author xiezhiping
  *
@@ -39,7 +39,7 @@ public class MessageController {
 
     @Autowired
     HostHolder hostHolder;
-
+        
     @RequestMapping(path = {"/msg/list"}, method = {RequestMethod.GET})
     public String conversationDetail(Model model) {
         try {
@@ -72,7 +72,7 @@ public class MessageController {
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
                 vo.set("message", msg);
-                User user = userService.getUser(msg.getFromId());
+                User user = userService.getUser(msg.getFromId());               
                 if (user == null) {
                     continue;
                 }

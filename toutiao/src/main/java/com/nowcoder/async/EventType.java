@@ -1,7 +1,9 @@
 package com.nowcoder.async;
 
 /**
- * Created by nowcoder on 2016/7/16.
+ * 事件的类型
+ * @author xiezhiping
+ *
  */
 public enum EventType {
     LIKE(0),

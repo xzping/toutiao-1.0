@@ -4,14 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by nowcoder on 2016/7/16.
+ * 发起了什么类型的事件
+ * 
+ * @author xiezhiping
+ *
  */
 public class EventModel {
-    private EventType type;
-    private int actorId;
-    private int entityType;
+    private EventType type; //事件类型
+    private int actorId;//事件触发者
+    private int entityType;//触发的对象
     private int entityId;
-    private int entityOwnerId;
+    private int entityOwnerId; //触发的对象的拥有者
     private Map<String, String> exts = new HashMap<String, String>();
 
     public String getExt(String key) {

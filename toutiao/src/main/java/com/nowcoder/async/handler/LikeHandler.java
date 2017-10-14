@@ -15,31 +15,38 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by nowcoder on 2016/7/16.
+ * 点赞的处理器
+ * 
+ * @author xiezhiping
+ *
  */
 @Component
 public class LikeHandler implements EventHandler {
-    @Autowired
-    MessageService messageService;
+	@Autowired
+	MessageService messageService;
 
-    @Autowired
-    UserService userService;
+	@Autowired
+	UserService userService;
 
-    @Override
-    public void doHandle(EventModel model) {
-        Message message = new Message();
-        message.setFromId(3);
-        //message.setToId(model.getEntityOwnerId());
-        message.setToId(model.getActorId());
-        User user = userService.getUser(model.getActorId());
-        message.setContent("用户" + user.getName()
-                + "赞了你的资讯,http://127.0.0.1:8080/news/" + model.getEntityId());
-        message.setCreatedDate(new Date());
-        messageService.addMessage(message);
-    }
+	/**
+	 * 点赞事件被触发时，给对方发送邮件
+	 */
+	@Override
+	public void doHandle(EventModel model) {
+		Message message = new Message();
+		message.setFromId(3);
+		message.setToId(model.getEntityOwnerId());
+		// message.setToId(model.getActorId());
+		User user = userService.getUser(model.getActorId());
+		message.setContent("用户" + user.getName() + "赞了你的资讯,http://127.0.0.1:8080/news/" + model.getEntityId());
+		message.setCreatedDate(new Date());
+		// 把这条消息发送出去
+		messageService.addMessage(message);
+	}
 
-    @Override
-    public List<EventType> getSupportEventTypes() {
-        return Arrays.asList(EventType.LIKE);
-    }
+	// 只关心点赞这个事件，一发生点赞就触发了事件
+	@Override
+	public List<EventType> getSupportEventTypes() {
+		return Arrays.asList(EventType.LIKE);
+	}
 }
