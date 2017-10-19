@@ -45,6 +45,7 @@ public class LikeController {
     @RequestMapping(path = {"/like"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String like(@Param("newId") int newsId) {
+    		//从redis的set集合中查询当前喜欢集合中喜欢的数量
         long likeCount = likeService.like(hostHolder.getUser().getId(), EntityType.ENTITY_NEWS, newsId);
         // 更新喜欢数
         News news = newsService.getById(newsId);
@@ -58,7 +59,7 @@ public class LikeController {
         return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
     }
 
-    /**
+    /** 
      * 点踩
      * 
      * @param newsId

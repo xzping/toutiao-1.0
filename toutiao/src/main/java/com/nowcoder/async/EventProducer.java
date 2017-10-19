@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EventProducer {
-	//事件的队列
+	//事件的队列，通过redis来实现这个队列
     @Autowired
     JedisAdapter jedisAdapter;
 

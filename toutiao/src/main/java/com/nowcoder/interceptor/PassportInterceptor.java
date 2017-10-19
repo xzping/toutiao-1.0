@@ -37,7 +37,8 @@ public class PassportInterceptor implements HandlerInterceptor {
 	private HostHolder hostHolder;
 
 	@Override
-	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o)
+	public boolean preHandle(HttpServletRequest httpServletRequest,
+							HttpServletResponse httpServletResponse, Object o)
 			throws Exception {
 		String ticket = null;
 		// 遍历http请求中的cookie中有没有该ticket信息

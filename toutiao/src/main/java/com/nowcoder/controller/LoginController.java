@@ -52,8 +52,10 @@ public class LoginController {
 	 */
 	@RequestMapping(path = { "/reg/" }, method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public String reg(Model model, @RequestParam("username") String username, @RequestParam("password") String password,
-			@RequestParam(value = "rember", defaultValue = "0") int rememberme, HttpServletResponse response) {
+	public String reg(Model model, @RequestParam("username") String username, 
+					@RequestParam("password") String password,
+					@RequestParam(value = "rember", defaultValue = "0") int rememberme, 
+					HttpServletResponse response) {
 		try {
 			Map<String, Object> map = userService.register(username, password);
 			if (map.containsKey("ticket")) {

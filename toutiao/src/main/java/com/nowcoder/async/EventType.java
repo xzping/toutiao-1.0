@@ -1,7 +1,7 @@
 package com.nowcoder.async;
 
 /**
- * 事件的类型
+ * 事件的类型（点赞、评论、登陆、邮件发送）
  * @author xiezhiping
  *
  */

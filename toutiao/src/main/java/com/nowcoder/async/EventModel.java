@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 发起了什么类型的事件
+ * 发起事件的信息，相当于把事件打包
  * 
  * @author xiezhiping
  *
