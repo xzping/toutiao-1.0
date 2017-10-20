@@ -81,11 +81,13 @@ public class JedisAdapter implements InitializingBean {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
+            // 返回多少个值
             return jedis.sadd(key, value);
         } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
             return 0;
         } finally {
+        		//redis连接池要及时的关闭，否则连接池的redis会被用光
             if (jedis != null) {
                 jedis.close();
             }

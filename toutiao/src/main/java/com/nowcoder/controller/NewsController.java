@@ -185,7 +185,7 @@ public class NewsController {
 			if (hostHolder.getUser() != null) {
 				news.setUserId(hostHolder.getUser().getId());
 			} else {
-				// 设置一个匿名用户
+				// 设置一个匿名用户，匿名分享
 				news.setUserId(3);
 			}
 			// 将当前分享的新闻资讯添加到数据库中

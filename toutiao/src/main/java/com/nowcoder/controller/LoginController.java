@@ -45,8 +45,7 @@ public class LoginController {
 	 * @param model
 	 * @param username
 	 * @param password
-	 * @param rememberme
-	 *            0代表不记住，1代笔记住
+	 * @param rememberme 0代表不记住，1代表记住
 	 * @param response
 	 * @return
 	 */
@@ -57,6 +56,7 @@ public class LoginController {
 					@RequestParam(value = "rember", defaultValue = "0") int rememberme, 
 					HttpServletResponse response) {
 		try {
+			// 通过用户名和密码进行注册，返回一个map集合，map集合包含了一些错误的信息（如果用户名或密码有问题）、以及注册成功后的ticket信息
 			Map<String, Object> map = userService.register(username, password);
 			if (map.containsKey("ticket")) {
 				Cookie cookie = new Cookie("ticket", map.get("ticket").toString());

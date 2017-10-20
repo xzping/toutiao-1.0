@@ -55,12 +55,14 @@ public class HomeController {
 			ViewObject vo = new ViewObject();
 			vo.set("news", news);
 			vo.set("user", userService.getUser(news.getUserId()));
-			//如果当前为登陆状态，则可以看到当前新闻资讯的点赞状态，否则状态为0
+			
+			//如果当前为登陆状态，则可以看到当前新闻资讯的点赞状态，否则状态为0,like=1代表点赞,like=-1表示点踩
 			if (localUserId != 0) {
 				vo.set("like", likeService.getLikeStatus(localUserId, EntityType.ENTITY_NEWS, news.getId()));
 			} else {
 				vo.set("like",0);
 			}
+
 			vos.add(vo);
 		}
 		return vos;

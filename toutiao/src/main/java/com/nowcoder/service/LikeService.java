@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LikeService {
+	
     @Autowired
     JedisAdapter jedisAdapter;
 
@@ -38,7 +39,7 @@ public class LikeService {
     }
 
     /**
-     * like操作
+     * like操作，返回的是集合中的相应点赞的数量
      * 
      * @param userId
      * @param entityType

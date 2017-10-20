@@ -68,8 +68,9 @@ public class UserService {
 		// 往user表中加入当前注册成功的用户
 		userDAO.addUser(user);
 
-		// 登陆
-		String ticket = addLoginTicket(user.getId());
+		// 为注册的用户随机产生一个ticket，该ticket与用户名是有关联的
+		String ticket = addLoginTicket(user.getId()); 
+		//将ticket存放到map集合中，返回到controller去进行ticket处理（拦截器的页面访问等等）
 		map.put("ticket", ticket);
 		return map;
 	}
