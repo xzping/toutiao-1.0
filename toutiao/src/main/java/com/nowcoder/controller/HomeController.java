@@ -27,6 +27,7 @@ import java.util.Map;
  */
 @Controller
 public class HomeController {
+	
 	//@Autowired实现从容器中自动注入
 	@Autowired
 	NewsService newsService;
