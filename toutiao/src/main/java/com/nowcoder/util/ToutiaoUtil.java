@@ -21,7 +21,7 @@ public class ToutiaoUtil {
 	// 图片保存的本地目录
 	public static String IMAGE_DIR = "/Users/xiezhiping/JavaDevelop/upload/";
 	// 图片允许的后缀扩展名
-	public static String[] IMAGE_FILE_EXTD = new String[] { "png", "bmp", "jpg", "jpeg" };
+	public static String[] IMAGE_FILE_EXTD = new String[] { "png", "bmp", "jpg", "jpeg","pdf" };
 
 	public static boolean isFileAllowed(String fileName) {
 		for (String ext : IMAGE_FILE_EXTD) {

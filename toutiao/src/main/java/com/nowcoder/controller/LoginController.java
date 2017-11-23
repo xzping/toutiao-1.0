@@ -59,6 +59,7 @@ public class LoginController {
 			// 通过用户名和密码进行注册，返回一个map集合，map集合包含了一些错误的信息（如果用户名或密码有问题）、以及注册成功后的ticket信息
 			Map<String, Object> map = userService.register(username, password);
 			if (map.containsKey("ticket")) {
+				//cookie和session的区别
 				Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
 				cookie.setPath("/");
 				if (rememberme > 0) {
@@ -86,6 +87,7 @@ public class LoginController {
 			Map<String, Object> map = userService.login(username, password);
 			//进行ticket登记，把当前用户的ticket存放在cookie中
 			if (map.containsKey("ticket")) {
+				// token
 				Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
 				cookie.setPath("/");
 				//设置cookie的时间为5天

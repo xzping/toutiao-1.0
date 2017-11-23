@@ -46,6 +46,11 @@ public class UserService {
 			map.put("msgpwd", "密码不能为空");
 			return map;
 		}
+		
+		if(password.length()<6) {
+			map.put("msglen", "密码长度不得少于六位");
+			return map;
+		}
 
 		// 查看user表中是否存在当前注册的用户名
 		User user = userDAO.selectByName(username);
